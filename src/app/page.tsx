@@ -117,7 +117,7 @@ export default function Home() {
         <Header />
 
         {/* Formulario */}
-        <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-2xl p-6 md:p-10 border border-gray-200">
+        <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10 border border-gray-200">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Sección 1: Información Personal */}
             <section className="space-y-6">
