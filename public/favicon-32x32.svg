@@ -1,0 +1,24 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo azul -->
+  <rect width="32" height="32" rx="6" fill="#2b54bf"/>
+  
+  <!-- QR Code simplificado en blanco -->
+  <g transform="translate(6, 6)">
+    <!-- Esquinas del QR -->
+    <rect x="0" y="0" width="7" height="7" rx="1" fill="white"/>
+    <rect x="1.5" y="1.5" width="4" height="4" rx="0.5" fill="#2b54bf"/>
+    <rect x="2.5" y="2.5" width="2" height="2" fill="white"/>
+    
+    <rect x="13" y="0" width="7" height="7" rx="1" fill="white"/>
+    <rect x="14.5" y="1.5" width="4" height="4" rx="0.5" fill="#2b54bf"/>
+    <rect x="15.5" y="2.5" width="2" height="2" fill="white"/>
+    
+    <rect x="0" y="13" width="7" height="7" rx="1" fill="white"/>
+    <rect x="1.5" y="14.5" width="4" height="4" rx="0.5" fill="#2b54bf"/>
+    <rect x="2.5" y="15.5" width="2" height="2" fill="white"/>
+    
+    <!-- Centro con acento amarillo -->
+    <circle cx="10" cy="10" r="3" fill="#fed113"/>
+    <rect x="9" y="9" width="2" height="2" rx="0.5" fill="#2b54bf"/>
+  </g>
+</svg>

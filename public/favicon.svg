@@ -1,0 +1,68 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo con gradiente -->
+  <rect width="512" height="512" rx="80" fill="url(#gradient)"/>
+  
+  <!-- Definir gradiente -->
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2b54bf"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Código QR estilizado -->
+  <g transform="translate(156, 156)">
+    <!-- Marco exterior -->
+    <rect x="0" y="0" width="200" height="200" rx="12" fill="white" opacity="0.95"/>
+    
+    <!-- Patrón QR simplificado -->
+    <!-- Esquina superior izquierda -->
+    <rect x="20" y="20" width="50" height="50" rx="4" fill="#2b54bf"/>
+    <rect x="30" y="30" width="30" height="30" rx="2" fill="white"/>
+    <rect x="38" y="38" width="14" height="14" rx="2" fill="#2b54bf"/>
+    
+    <!-- Esquina superior derecha -->
+    <rect x="130" y="20" width="50" height="50" rx="4" fill="#2b54bf"/>
+    <rect x="140" y="30" width="30" height="30" rx="2" fill="white"/>
+    <rect x="148" y="38" width="14" height="14" rx="2" fill="#2b54bf"/>
+    
+    <!-- Esquina inferior izquierda -->
+    <rect x="20" y="130" width="50" height="50" rx="4" fill="#2b54bf"/>
+    <rect x="30" y="140" width="30" height="30" rx="2" fill="white"/>
+    <rect x="38" y="148" width="14" height="14" rx="2" fill="#2b54bf"/>
+    
+    <!-- Patrón central decorativo -->
+    <circle cx="100" cy="100" r="25" fill="#fed113"/>
+    <path d="M 100 85 L 110 100 L 100 115 L 90 100 Z" fill="#2b54bf"/>
+    
+    <!-- Puntos decorativos -->
+    <rect x="85" y="20" width="8" height="8" rx="2" fill="#2b54bf"/>
+    <rect x="100" y="20" width="8" height="8" rx="2" fill="#2b54bf"/>
+    <rect x="115" y="20" width="8" height="8" rx="2" fill="#2b54bf"/>
+    
+    <rect x="20" y="85" width="8" height="8" rx="2" fill="#2b54bf"/>
+    <rect x="20" y="100" width="8" height="8" rx="2" fill="#2b54bf"/>
+    <rect x="20" y="115" width="8" height="8" rx="2" fill="#2b54bf"/>
+    
+    <rect x="172" y="85" width="8" height="8" rx="2" fill="#2b54bf"/>
+    <rect x="172" y="100" width="8" height="8" rx="2" fill="#2b54bf"/>
+    <rect x="172" y="115" width="8" height="8" rx="2" fill="#2b54bf"/>
+    
+    <rect x="85" y="172" width="8" height="8" rx="2" fill="#2b54bf"/>
+    <rect x="100" y="172" width="8" height="8" rx="2" fill="#2b54bf"/>
+    <rect x="115" y="172" width="8" height="8" rx="2" fill="#2b54bf"/>
+    
+    <!-- Detalles adicionales -->
+    <rect x="130" y="85" width="8" height="8" rx="2" fill="#2b54bf"/>
+    <rect x="145" y="100" width="8" height="8" rx="2" fill="#2b54bf"/>
+    <rect x="130" y="115" width="8" height="8" rx="2" fill="#2b54bf"/>
+    
+    <rect x="85" y="130" width="8" height="8" rx="2" fill="#2b54bf"/>
+    <rect x="100" y="145" width="8" height="8" rx="2" fill="#2b54bf"/>
+    <rect x="115" y="130" width="8" height="8" rx="2" fill="#2b54bf"/>
+  </g>
+  
+  <!-- Texto "ATC" en la parte inferior -->
+  <text x="256" y="440" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">ATC</text>
+  <text x="256" y="470" font-family="Arial, sans-serif" font-size="20" fill="#fed113" text-anchor="middle">2025</text>
+</svg>

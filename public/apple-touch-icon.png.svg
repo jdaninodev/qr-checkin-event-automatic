@@ -1,0 +1,57 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo con gradiente -->
+  <rect width="180" height="180" fill="url(#gradient)"/>
+  
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2b54bf"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- QR Code grande centrado -->
+  <g transform="translate(40, 40)">
+    <!-- Marco blanco -->
+    <rect x="0" y="0" width="100" height="100" rx="8" fill="white" opacity="0.95"/>
+    
+    <!-- Esquina superior izquierda -->
+    <rect x="10" y="10" width="25" height="25" rx="2" fill="#2b54bf"/>
+    <rect x="15" y="15" width="15" height="15" rx="1" fill="white"/>
+    <rect x="18" y="18" width="9" height="9" rx="1" fill="#2b54bf"/>
+    
+    <!-- Esquina superior derecha -->
+    <rect x="65" y="10" width="25" height="25" rx="2" fill="#2b54bf"/>
+    <rect x="70" y="15" width="15" height="15" rx="1" fill="white"/>
+    <rect x="73" y="18" width="9" height="9" rx="1" fill="#2b54bf"/>
+    
+    <!-- Esquina inferior izquierda -->
+    <rect x="10" y="65" width="25" height="25" rx="2" fill="#2b54bf"/>
+    <rect x="15" y="70" width="15" height="15" rx="1" fill="white"/>
+    <rect x="18" y="73" width="9" height="9" rx="1" fill="#2b54bf"/>
+    
+    <!-- Centro con acento amarillo -->
+    <circle cx="50" cy="50" r="12" fill="#fed113"/>
+    <path d="M 50 42 L 56 50 L 50 58 L 44 50 Z" fill="#2b54bf"/>
+    
+    <!-- Detalles decorativos -->
+    <rect x="42" y="10" width="4" height="4" rx="1" fill="#2b54bf"/>
+    <rect x="50" y="10" width="4" height="4" rx="1" fill="#2b54bf"/>
+    <rect x="58" y="10" width="4" height="4" rx="1" fill="#2b54bf"/>
+    
+    <rect x="10" y="42" width="4" height="4" rx="1" fill="#2b54bf"/>
+    <rect x="10" y="50" width="4" height="4" rx="1" fill="#2b54bf"/>
+    <rect x="10" y="58" width="4" height="4" rx="1" fill="#2b54bf"/>
+    
+    <rect x="86" y="42" width="4" height="4" rx="1" fill="#2b54bf"/>
+    <rect x="86" y="50" width="4" height="4" rx="1" fill="#2b54bf"/>
+    <rect x="86" y="58" width="4" height="4" rx="1" fill="#2b54bf"/>
+    
+    <rect x="42" y="86" width="4" height="4" rx="1" fill="#2b54bf"/>
+    <rect x="50" y="86" width="4" height="4" rx="1" fill="#2b54bf"/>
+    <rect x="58" y="86" width="4" height="4" rx="1" fill="#2b54bf"/>
+  </g>
+  
+  <!-- Texto ATC -->
+  <text x="90" y="155" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white" text-anchor="middle">ATC</text>
+  <text x="90" y="170" font-family="Arial, sans-serif" font-size="10" fill="#fed113" text-anchor="middle">FERIA 2025</text>
+</svg>

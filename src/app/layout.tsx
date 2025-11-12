@@ -20,6 +20,13 @@ export const metadata: Metadata = {
   keywords: ["Feria Empresarial", "Registro", "QR", "Asistencia", "Evento 2025", "Educación", "Empresas"],
   authors: [{ name: "Feria Empresarial 2025" }],
   creator: "Feria Empresarial 2025",
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
   openGraph: {
     title: "Feria Empresarial 2025 - Registro de Asistentes",
     description: "Registra tu asistencia a la Feria Empresarial 2025 y recibe tu ticket con código QR",
