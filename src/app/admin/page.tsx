@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Lock, Eye, EyeOff, LogOut, Users, Calendar, FileText, QrCode, Download, BarChart3, Settings, Database, Mail, FileType, Clock } from 'lucide-react';
+import { Shield, Lock, Eye, EyeOff, LogOut, Users, Calendar, FileText, QrCode, Download, BarChart3, Settings, Database, Mail, FileType, Clock, Scan } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { obtenerEstadisticasCheckin, obtenerAsistentesConCheckins } from '@/app/admin-actions';
 
 export default function AdminPanel() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -182,23 +183,49 @@ export default function AdminPanel() {
             color="from-[#2b54bf] to-blue-600"
           />
           <StatCard
-            icon={<Calendar className="w-8 h-8" />}
-            title="Asistentes Hoy"
+            icon={<Scan className="w-8 h-8" />}
+            title="Check-in 12 Nov AM"
             value="0"
-            color="from-[#fed113] to-yellow-600"
+            color="from-blue-500 to-blue-600"
           />
           <StatCard
-            icon={<QrCode className="w-8 h-8" />}
-            title="QR Generados"
+            icon={<Scan className="w-8 h-8" />}
+            title="Check-in 12 Nov PM"
             value="0"
-            color="from-green-500 to-green-600"
+            color="from-indigo-500 to-indigo-600"
           />
           <StatCard
-            icon={<FileText className="w-8 h-8" />}
-            title="Tickets PDF"
+            icon={<Scan className="w-8 h-8" />}
+            title="Check-in 13 Nov AM"
             value="0"
             color="from-purple-500 to-purple-600"
           />
+        </div>
+
+        {/* Acceso rápido al scanner */}
+        <div className="mb-6">
+          <Link href="/admin/scanner">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="bg-gradient-to-r from-[#2b54bf] to-[#1e3a8a] text-white rounded-xl shadow-lg p-6 cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="bg-white/20 p-3 rounded-lg">
+                    <Scan className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold">Ir al Scanner de QR</h3>
+                    <p className="text-blue-100 text-sm">Registrar check-ins de asistentes</p>
+                  </div>
+                </div>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </motion.div>
+          </Link>
         </div>
 
         {/* Secciones del Dashboard */}
