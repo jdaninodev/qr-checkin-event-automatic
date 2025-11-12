@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# qr-checkin-event-automatic
 
-## Getting Started
+¡Bienvenido! Este repositorio contiene una aplicación Next.js para el check-in de asistentes a eventos mediante un formulario y lectura de QR. El objetivo es facilitar el registro rápido y (opcionalmente) la exportación de asistencia desde una interfaz de administración.
 
-First, run the development server:
+---
 
-```bash
+## Contenido del README
+
+- Descripción breve
+- Requisitos e instalación
+- Uso (local y producción)
+- Arquitectura y flujo (gráficos)
+- Campos del formulario y validaciones
+- Desarrollo y notas para contributors
+
+---
+
+## Vista rápida
+
+- Ruta pública: página principal con formulario de registro.
+- Panel admin: `/admin` — lista / exportación (si está implementado).
+
+## Instalación
+
+Requisitos: Node.js 16+ y npm/pnpm/yarn.
+
+En PowerShell (o terminal):
+
+```powershell
+# Instalar dependencias
+npm install
+
+# Iniciar en modo desarrollo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Construir para producción
+npm run build
+# Levantar en producción
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre http://localhost:3000 en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Uso
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Escanea el QR del evento (o abre la URL pública).
+2. Completa el formulario con los datos del asistente.
+3. Al enviar, verás una confirmación. Si existe un backend, se persistirá; si no, el comportamiento es local/temporal.
 
-## Learn More
+## Arquitectura
 
-To learn more about Next.js, take a look at the following resources:
+Diagrama de alto nivel:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![Arquitectura](/images/architecture.svg)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Breve explicación:
 
-## Deploy on Vercel
+- Navegador / Móvil: interfaz donde el usuario escanea o accede a la URL y completa el formulario.
+- Next.js App: contiene las páginas principales y los componentes del formulario (ubicados en `src/components`).
+- API / Backend (opcional): puede recibir los POST de check-in y almacenar en base de datos o enviar a un servicio externo.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Flujo de check-in
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+![Flujo](/images/flow.svg)
+
+1. Escanear QR → 2. Completar formulario → 3. Confirmación → 4. Admin / Export
+
+## Campos del formulario (componentes principales)
+
+- Tipo de asistente (estudiante, acudiente) — `TipoAsistenteSelector.tsx`.
+- Jornada — `JornadaSelector.tsx`.
+- Campos de Estudiante — `EstudianteForm.tsx`.
+- Campos de Acudiente — `AcudienteForm.tsx`.
+- Inputs reutilizables — `InputField.tsx`, `SelectField.tsx`.
+
+Validaciones recomendadas:
+
+- Campos obligatorios: nombre, documento, tipo de asistente.
+- Validación de formato para documento / teléfono.
+- Prevención de envíos duplicados (por ejemplo, mismo documento en corto periodo).
+
+## Desarrollo
+
+Estructura relevante:
+
+- `app/` — rutas y layout de Next.js.
+- `src/components/` — componentes del formulario y UI.
+- `public/images/` — gráficos e imágenes (ahora contiene `architecture.svg` y `flow.svg`).
+
+Para contribuir:
+
+1. Crea una rama con tu cambio.
+2. Haz un PR indicando qué se modifica.
+
+## Cómo añadir persistencia
+
+Si quieres guardar los registros, puedes añadir una API (por ejemplo, Cloud Functions, serverless o un endpoint Next.js API) que reciba los datos del formulario y los almacene en una base de datos (Postgres, MongoDB, Firestore, etc.).
+
+## Notas y recomendaciones
+
+- Las rutas estáticas de imágenes en Next.js se sirven desde `/images/` si están en `public/images`.
+- Si quieres exportar CSV desde el admin, implementa un endpoint que devuelva `text/csv` con los registros.
+
+## Contacto
+
+Si necesitas ayuda extra, abre un issue en este repositorio o contacta al mantenedor.
+
+---
+
+_README alternativo generado (archivo `README.es.md`). Si quieres que reemplace `README.md`, puedo intentar renombrarlo o volver a aplicar el parche._

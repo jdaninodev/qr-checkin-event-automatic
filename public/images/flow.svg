@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="220" viewBox="0 0 900 220">
+  <style>
+    .step{fill:#ffffff;stroke:#10b981;stroke-width:2}
+    .label{font:13px sans-serif;fill:#064e3b}
+    .title{font:bold 16px sans-serif;}
+  </style>
+  <rect x="12" y="10" width="876" height="198" rx="12" fill="#fbfffc" stroke="#e6f6ed"/>
+  <text x="28" y="36" class="title">Flujo de Check-in</text>
+
+  <!-- steps -->
+  <rect class="step" x="40" y="70" width="140" height="56" rx="8"/>
+  <text x="60" y="102" class="label">1. Escanea QR</text>
+
+  <rect class="step" x="230" y="70" width="180" height="56" rx="8"/>
+  <text x="250" y="102" class="label">2. Completa Formulario</text>
+
+  <rect class="step" x="470" y="70" width="160" height="56" rx="8"/>
+  <text x="490" y="102" class="label">3. Confirmación</text>
+
+  <rect class="step" x="680" y="70" width="120" height="56" rx="8"/>
+  <text x="700" y="102" class="label">4. Admin / Export</text>
+
+  <!-- arrows -->
+  <line x1="180" y1="98" x2="230" y2="98" stroke="#10b981" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="410" y1="98" x2="470" y2="98" stroke="#10b981" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="630" y1="98" x2="680" y2="98" stroke="#10b981" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981" />
+    </marker>
+  </defs>
+
+  <text x="28" y="180" class="label">Descripción: flujo simple para registro y verificación de asistentes.</text>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="360" viewBox="0 0 900 360">
+  <style>
+    .title{font: bold 18px sans-serif;}
+    .box{fill:#f5f7ff;stroke:#3b82f6;stroke-width:2;}
+    .text{font:14px sans-serif;fill:#0f172a}
+  </style>
+  <rect x="12" y="10" width="876" height="338" rx="12" fill="#ffffff" stroke="#e6edf8"/>
+  <text x="28" y="36" class="title">Arquitectura - qr-checkin-event-automatic</text>
+
+  <!-- Browser -->
+  <rect class="box" x="40" y="70" width="180" height="80" rx="8"/>
+  <text x="60" y="102" class="text">Navegador / Móvil</text>
+  <text x="60" y="122" class="text">(Escanea QR / Formulario)</text>
+
+  <!-- Next.js -->
+  <rect class="box" x="260" y="50" width="220" height="140" rx="8"/>
+  <text x="280" y="82" class="text">Next.js App</text>
+  <text x="280" y="102" class="text">Rutas: /, /admin</text>
+  <text x="280" y="122" class="text">Form: Estudiante / Acudiente</text>
+
+  <!-- Serverless / API -->
+  <rect class="box" x="520" y="70" width="180" height="80" rx="8"/>
+  <text x="540" y="102" class="text">API / Backend</text>
+  <text x="540" y="122" class="text">(Opcional: persistencia)</text>
+
+  <!-- arrows -->
+  <line x1="220" y1="110" x2="260" y2="110" stroke="#0ea5e9" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="480" y1="110" x2="520" y2="110" stroke="#0ea5e9" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#0ea5e9" />
+    </marker>
+  </defs>
+
+  <text x="28" y="320" class="text">Nota: las imágenes se encuentran en <tspan font-weight="bold">/public/images</tspan> y se sirven desde <tspan font-weight="bold">/images/</tspan></text>
+</svg>
