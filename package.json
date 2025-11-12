@@ -17,6 +17,7 @@
     "@zxing/library": "^0.21.3",
     "bcryptjs": "^3.0.3",
     "csv-parse": "^6.1.0",
+    "dotenv": "^17.2.3",
     "framer-motion": "^12.23.24",
     "html2canvas": "^1.4.1",
     "jose": "^6.1.1",

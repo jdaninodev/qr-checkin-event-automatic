@@ -3,9 +3,13 @@ import fs from 'fs';
 import path from 'path';
 import { parse } from 'csv-parse/sync';
 import QRCode from 'qrcode';
+import * as dotenv from 'dotenv';
+
+// Cargar variables de entorno desde .env.local
+dotenv.config({ path: '.env.local' });
 
 // Script para importar asistentes desde un CSV a la base de datos
-// Uso: node --loader ts-node/esm scripts/import-csv.ts
+// Uso: npm run import-csv [ruta-al-csv]
 
 const DATABASE_URL = process.env.DATABASE_URL;
 
@@ -60,24 +64,37 @@ async function importarCSV(csvPath: string) {
       console.log(`\n[${index + 1}/${records.length}] Procesando:`, row);
 
       // Mapear las columnas del CSV a los campos de la base de datos
-      // AJUSTA ESTOS NOMBRES SEGÚN TU CSV
-      const tipoAsistente = row['Tipo de asistente']?.toLowerCase() === 'estudiante' ? 'estudiante' : 'acudiente';
-      const jornada = row['Jornada']?.toLowerCase() || null;
+      // Basado en el CSV "Formulario de asistencia - Feria Empresarial.csv"
+      const tipoAsistenteRaw = row['Tipo de Asistente'] || row['tipo_asistente'] || '';
+      const tipoAsistente = tipoAsistenteRaw.toLowerCase().includes('estudiante') ? 'estudiante' 
+                          : tipoAsistenteRaw.toLowerCase().includes('acudiente') ? 'acudiente'
+                          : 'acudiente'; // Por defecto
+      
+      const jornadaRaw = row['Jornada de asistencia'] || row['Jornada'] || '';
+      let jornada = null;
+      if (jornadaRaw.toLowerCase().includes('mañana') && jornadaRaw.toLowerCase().includes('tarde')) {
+        jornada = 'ambas';
+      } else if (jornadaRaw.toLowerCase().includes('mañana')) {
+        jornada = 'mañana';
+      } else if (jornadaRaw.toLowerCase().includes('tarde')) {
+        jornada = 'tarde';
+      }
+      
       const nombres = row['Nombres'] || row['nombres'] || '';
       const apellidos = row['Apellidos'] || row['apellidos'] || '';
-      const tipoDocumento = row['Tipo de documento'] || row['tipo_documento'] || 'CC';
-      const numeroDocumento = row['Número de documento'] || row['numero_documento'] || '';
-      const correoElectronico = row['Correo electrónico'] || row['correo'] || null;
-      const telefono = row['Teléfono'] || row['telefono'] || null;
+      const tipoDocumento = row['Documento de Identidad'] || row['tipo_documento'] || 'CC';
+      const numeroDocumento = row['Numero de identidad'] || row['numero_documento'] || '';
+      const correoElectronico = row['Correo Electrónico'] || row['correo'] || null;
+      const telefono = row['Numero de teléfono'] || row['telefono'] || null;
       
       // Campos de estudiante
-      const grado = tipoAsistente === 'estudiante' ? (row['Grado'] || row['grado']) : null;
+      const grado = tipoAsistente === 'estudiante' ? (row['Grado de estudio'] || row['grado']) : null;
       const grupo = tipoAsistente === 'estudiante' ? (row['Grupo'] || row['grupo']) : null;
       const nombreAcudiente = tipoAsistente === 'estudiante' ? (row['Nombre del acudiente'] || row['nombre_acudiente']) : null;
       
       // Campos de acudiente
-      const profesion = tipoAsistente === 'acudiente' ? (row['Profesión'] || row['profesion']) : null;
-      const empresa = tipoAsistente === 'acudiente' ? (row['Empresa'] || row['empresa']) : null;
+      const profesion = tipoAsistente === 'acudiente' ? (row['Parentesco'] || row['profesion']) : null;
+      const empresa = tipoAsistente === 'acudiente' ? (row['Sede Educativa'] || row['empresa']) : null;
       const cargo = tipoAsistente === 'acudiente' ? (row['Cargo'] || row['cargo']) : null;
 
       if (!nombres || !apellidos || !numeroDocumento) {
