@@ -149,29 +149,55 @@ function generateEmailHTML(data: EmailData): string {
  */
 export async function enviarTicketEmail(data: EmailData) {
   try {
+    console.log('📧 [EMAIL] Iniciando envío de email...', { to: data.to });
+
     if (!process.env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY no está configurado');
+      console.error('❌ [EMAIL] RESEND_API_KEY no está configurado');
       return {
         success: false,
         message: 'Servicio de email no configurado',
       };
     }
+    console.log('✅ [EMAIL] RESEND_API_KEY encontrado');
 
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Feria Empresarial <onboarding@resend.dev>';
+    console.log('📧 [EMAIL] Configuración:', {
+      from: fromEmail,
+      to: data.to,
+      hasQRCode: !!data.qrCodeDataUrl,
+    });
+
+    console.log('📤 [EMAIL] Enviando email vía Resend...');
     const result = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'Feria Empresarial <onboarding@resend.dev>',
+      from: fromEmail,
       to: data.to,
       subject: '🎟️ Tu ticket para la Feria Empresarial 2025',
       html: generateEmailHTML(data),
     });
 
-    console.log('Email enviado exitosamente:', result);
+    console.log('✅ [EMAIL] Email enviado exitosamente:', {
+      id: result.data?.id,
+      status: result.error ? 'error' : 'success',
+    });
+
+    if (result.error) {
+      console.error('❌ [EMAIL] Resend retornó error:', result.error);
+      return {
+        success: false,
+        message: 'Error al enviar el email',
+        error: result.error.message,
+      };
+    }
 
     return {
       success: true,
       messageId: result.data?.id,
     };
   } catch (error: any) {
-    console.error('Error al enviar email:', error);
+    console.error('❌ [EMAIL] Error al enviar email:', {
+      message: error.message,
+      stack: error.stack,
+    });
     return {
       success: false,
       message: 'Error al enviar el email',

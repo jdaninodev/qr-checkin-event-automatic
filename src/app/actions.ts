@@ -55,16 +55,32 @@ async function generarCodigoQR(numeroDocumento: string, id: number): Promise<str
  */
 export async function registrarAsistente(data: AsistenteData) {
   try {
+    console.log('🚀 [INICIO] Iniciando registro de asistente...', { 
+      nombres: data.nombres, 
+      correo: data.correoElectronico 
+    });
+
     // Validar que DATABASE_URL esté configurado
     if (!process.env.DATABASE_URL) {
+      console.error('❌ [ERROR] DATABASE_URL no está configurado');
       throw new Error('DATABASE_URL no está configurado');
     }
+    console.log('✅ [DB] DATABASE_URL configurado');
+
+    // Verificar variables de entorno de Resend
+    console.log('📧 [RESEND] Variables:', {
+      hasApiKey: !!process.env.RESEND_API_KEY,
+      hasFromEmail: !!process.env.RESEND_FROM_EMAIL,
+      fromEmail: process.env.RESEND_FROM_EMAIL,
+    });
 
     // Conectar a Neon
     const sql = neon(process.env.DATABASE_URL);
+    console.log('✅ [DB] Conexión a Neon establecida');
 
     // Validaciones básicas
     if (!data.nombres || !data.apellidos || !data.numeroDocumento) {
+      console.log('❌ [VALIDACION] Faltan campos obligatorios');
       return {
         success: false,
         message: 'Faltan campos obligatorios: nombres, apellidos y número de documento',
@@ -72,6 +88,7 @@ export async function registrarAsistente(data: AsistenteData) {
     }
 
     if (!data.aceptaPoliticas) {
+      console.log('❌ [VALIDACION] No aceptó políticas');
       return {
         success: false,
         message: 'Debes aceptar las políticas de privacidad',
@@ -79,25 +96,31 @@ export async function registrarAsistente(data: AsistenteData) {
     }
 
     if (!data.correoElectronico) {
+      console.log('❌ [VALIDACION] Falta correo electrónico');
       return {
         success: false,
         message: 'El correo electrónico es obligatorio para recibir tu ticket',
       };
     }
+    console.log('✅ [VALIDACION] Validaciones básicas pasadas');
 
     // Verificar si ya existe un registro con este documento
+    console.log('🔍 [DB] Verificando documento duplicado:', data.numeroDocumento);
     const existente = await sql`
       SELECT id FROM asistentes WHERE numero_documento = ${data.numeroDocumento}
     `;
 
     if (existente.length > 0) {
+      console.log('❌ [DB] Documento duplicado encontrado');
       return {
         success: false,
         message: 'Ya existe un registro con este número de documento',
       };
     }
+    console.log('✅ [DB] No hay duplicados');
 
     // Insertar el nuevo asistente
+    console.log('💾 [DB] Insertando registro en la base de datos...');
     const result = await sql`
       INSERT INTO asistentes (
         tipo_asistente, jornada, nombres, apellidos, tipo_documento,
@@ -126,21 +149,27 @@ export async function registrarAsistente(data: AsistenteData) {
     `;
 
     const registroId = result[0].id;
+    console.log('✅ [DB] Registro insertado con ID:', registroId);
 
     // Generar código QR único
+    console.log('🎫 [QR] Generando código QR...');
     const codigoQR = `FERIA2025-${data.numeroDocumento}-${registroId}`;
     const qrDataUrl = await generarCodigoQR(data.numeroDocumento, registroId);
+    console.log('✅ [QR] Código QR generado:', codigoQR);
 
     // Actualizar el registro con el código QR
+    console.log('💾 [DB] Actualizando registro con código QR...');
     await sql`
       UPDATE asistentes 
       SET qr_code = ${codigoQR}
       WHERE id = ${registroId}
     `;
+    console.log('✅ [DB] Código QR guardado en la base de datos');
 
     // Enviar email con el ticket solo si hay correo válido
     let emailEnviado = false;
     if (data.correoElectronico) {
+      console.log('📧 [EMAIL] Intentando enviar email a:', data.correoElectronico);
       const emailResult = await enviarTicketEmail({
         to: data.correoElectronico,
         nombre: data.nombres,
@@ -154,10 +183,13 @@ export async function registrarAsistente(data: AsistenteData) {
       emailEnviado = emailResult.success;
       
       if (!emailResult.success) {
-        console.error('Error al enviar email:', emailResult.message);
+        console.error('❌ [EMAIL] Error al enviar email:', emailResult.message);
+      } else {
+        console.log('✅ [EMAIL] Email enviado exitosamente');
       }
     }
 
+    console.log('🎉 [EXITO] Registro completado exitosamente');
     return {
       success: true,
       message: emailEnviado 
@@ -168,7 +200,11 @@ export async function registrarAsistente(data: AsistenteData) {
       emailEnviado,
     };
   } catch (error: any) {
-    console.error('Error al registrar asistente:', error);
+    console.error('❌ [ERROR FATAL] Error al registrar asistente:', {
+      message: error.message,
+      code: error.code,
+      stack: error.stack,
+    });
     
     // Manejar error de duplicado (por si acaso)
     if (error.code === '23505') {
