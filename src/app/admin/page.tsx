@@ -12,14 +12,42 @@ export default function AdminPanel() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [stats, setStats] = useState<any>(null);
+  const [asistentes, setAsistentes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Verificar si ya está autenticado al cargar
   useEffect(() => {
     const auth = sessionStorage.getItem('adminAuth');
     if (auth === 'true') {
       setIsAuthenticated(true);
+      loadData();
+    } else {
+      setLoading(false);
     }
   }, []);
+
+  // Cargar datos desde la base de datos
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      // Cargar estadísticas
+      const statsResult = await obtenerEstadisticasCheckin();
+      if (statsResult.success) {
+        setStats(statsResult.data);
+      }
+
+      // Cargar lista de asistentes
+      const asistentesResult = await obtenerAsistentesConCheckins();
+      if (asistentesResult.success) {
+        setAsistentes(asistentesResult.data || []);
+      }
+    } catch (error) {
+      console.error('Error cargando datos:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,6 +56,7 @@ export default function AdminPanel() {
       sessionStorage.setItem('adminAuth', 'true');
       setError('');
       setPassword('');
+      loadData(); // Cargar datos después de autenticar
     } else {
       setError('Contraseña incorrecta');
       setPassword('');
@@ -179,25 +208,25 @@ export default function AdminPanel() {
           <StatCard
             icon={<Users className="w-8 h-8" />}
             title="Total Registros"
-            value="0"
+            value={stats?.total_registrados || '0'}
             color="from-[#2b54bf] to-blue-600"
           />
           <StatCard
             icon={<Scan className="w-8 h-8" />}
             title="Check-in 12 Nov AM"
-            value="0"
+            value={stats?.checkin_12nov_am_count || '0'}
             color="from-blue-500 to-blue-600"
           />
           <StatCard
             icon={<Scan className="w-8 h-8" />}
             title="Check-in 12 Nov PM"
-            value="0"
+            value={stats?.checkin_12nov_pm_count || '0'}
             color="from-indigo-500 to-indigo-600"
           />
           <StatCard
             icon={<Scan className="w-8 h-8" />}
             title="Check-in 13 Nov AM"
-            value="0"
+            value={stats?.checkin_13nov_am_count || '0'}
             color="from-purple-500 to-purple-600"
           />
         </div>
@@ -243,11 +272,71 @@ export default function AdminPanel() {
               </div>
               <h2 className="text-xl font-bold text-gray-800">Registros Recientes</h2>
             </div>
-            <div className="text-center py-10 text-gray-500">
-              <Users className="w-12 h-12 mx-auto mb-3 opacity-20" />
-              <p className="font-medium">No hay registros aún</p>
-              <p className="text-sm mt-1">Los asistentes registrados aparecerán aquí</p>
-            </div>
+            
+            {loading ? (
+              <div className="text-center py-10">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2b54bf] mx-auto mb-3"></div>
+                <p className="text-gray-500">Cargando registros...</p>
+              </div>
+            ) : asistentes.length === 0 ? (
+              <div className="text-center py-10 text-gray-500">
+                <Users className="w-12 h-12 mx-auto mb-3 opacity-20" />
+                <p className="font-medium">No hay registros aún</p>
+                <p className="text-sm mt-1">Los asistentes registrados aparecerán aquí</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 border-b">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-700">Nombre</th>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-700">Documento</th>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-700">Tipo</th>
+                      <th className="px-4 py-3 text-center font-semibold text-gray-700">12 AM</th>
+                      <th className="px-4 py-3 text-center font-semibold text-gray-700">12 PM</th>
+                      <th className="px-4 py-3 text-center font-semibold text-gray-700">13 AM</th>
+                      <th className="px-4 py-3 text-center font-semibold text-gray-700">13 PM</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y">
+                    {asistentes.slice(0, 10).map((asistente: any) => (
+                      <tr key={asistente.id} className="hover:bg-gray-50">
+                        <td className="px-4 py-3">
+                          {asistente.nombres} {asistente.apellidos}
+                        </td>
+                        <td className="px-4 py-3 text-gray-600">{asistente.numero_documento}</td>
+                        <td className="px-4 py-3">
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            asistente.tipo_asistente === 'estudiante' 
+                              ? 'bg-blue-100 text-blue-800' 
+                              : 'bg-purple-100 text-purple-800'
+                          }`}>
+                            {asistente.tipo_asistente}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          {asistente.checkin_12nov_am ? '✅' : '⬜'}
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          {asistente.checkin_12nov_pm ? '✅' : '⬜'}
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          {asistente.checkin_13nov_am ? '✅' : '⬜'}
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          {asistente.checkin_13nov_pm ? '✅' : '⬜'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {asistentes.length > 10 && (
+                  <p className="text-center text-sm text-gray-500 mt-4">
+                    Mostrando 10 de {asistentes.length} registros
+                  </p>
+                )}
+              </div>
+            )}
           </motion.div>
         </div>
 

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "import-csv": "tsx scripts/import-csv.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -15,6 +16,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "@zxing/library": "^0.21.3",
     "bcryptjs": "^3.0.3",
+    "csv-parse": "^6.1.0",
     "framer-motion": "^12.23.24",
     "html2canvas": "^1.4.1",
     "jose": "^6.1.1",
@@ -35,6 +37,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }
