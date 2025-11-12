@@ -30,6 +30,9 @@ En PowerShell (o terminal):
 # Instalar dependencias
 npm install
 
+# Configurar variables de entorno (ver sección Backend)
+# Copia .env.example a .env.local y completa con tus valores
+
 # Iniciar en modo desarrollo
 npm run dev
 
@@ -40,6 +43,29 @@ npm start
 ```
 
 Abre http://localhost:3000 en tu navegador.
+
+## Backend y Base de Datos
+
+Este proyecto usa **Neon Postgres** como base de datos y está configurado para funcionar en producción (Vercel).
+
+### Configuración rápida (para deploy en Vercel):
+
+1. **Ejecuta el schema SQL** en Neon Console (ver `database/SETUP.md` para instrucciones detalladas):
+   - Accede al SQL Editor desde Vercel Storage o Neon Console
+   - Ejecuta el script en `database/schema.sql`
+
+2. **Configura la variable de entorno** en Vercel:
+   - Settings → Environment Variables
+   - Añade `DATABASE_URL` con tu connection string de Neon
+
+3. **Redespliega** la aplicación
+
+📖 **Guía completa:** consulta `database/SETUP.md` y `database/README.md`
+
+### Dependencias del backend:
+- `@neondatabase/serverless` - Driver de Postgres para Vercel/Edge
+- `@vercel/analytics` - Analytics de Vercel
+- `@vercel/speed-insights` - Speed Insights de Vercel
 
 ## Uso
 

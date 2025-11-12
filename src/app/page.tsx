@@ -5,6 +5,9 @@ import { motion } from 'framer-motion';
 import { User, IdCard, Mail, Phone, Building2 } from 'lucide-react';
 import Image from 'next/image';
 
+// Server Actions
+import { registrarAsistente, type AsistenteData } from '@/app/actions';
+
 // Components
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
@@ -93,6 +96,9 @@ export default function Home() {
     aceptaPoliticas: false,
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
   const handleJornadaChange = (jornada: string) => {
     setFormData(prev => ({
       ...prev,
@@ -104,8 +110,98 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Datos del formulario:', formData);
-    alert('¡Formulario enviado exitosamente! (Por ahora solo en consola)');
+    setIsSubmitting(true);
+    setSubmitMessage(null);
+
+    try {
+      // Validar campos obligatorios
+      if (!formData.aceptaPoliticas) {
+        setSubmitMessage({
+          type: 'error',
+          text: 'Debes aceptar las políticas de privacidad para continuar'
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Mapear el tipo de asistente al formato de la BD
+      let tipoAsistente: 'estudiante' | 'acudiente' = 'estudiante';
+      if (formData.tipoAsistente === 'Acudiente / Padre de familia') {
+        tipoAsistente = 'acudiente';
+      }
+
+      // Preparar datos para enviar
+      const dataToSend: AsistenteData = {
+        tipoAsistente,
+        jornada: formData.jornada.length > 0 
+          ? (formData.jornada.includes('Mañana') ? 'mañana' : 'tarde')
+          : undefined,
+        nombres: formData.nombres,
+        apellidos: formData.apellidos,
+        tipoDocumento: formData.tipoDocumento,
+        numeroDocumento: formData.numeroIdentidad,
+        correoElectronico: formData.correo,
+        telefono: formData.telefono,
+        aceptaPoliticas: formData.aceptaPoliticas,
+      };
+
+      // Añadir campos específicos de estudiante
+      if (tipoAsistente === 'estudiante') {
+        dataToSend.grado = formData.gradoEstudio;
+        dataToSend.grupo = formData.sedeEducativa;
+      }
+
+      // Añadir campos específicos de acudiente
+      if (tipoAsistente === 'acudiente') {
+        dataToSend.nombreAcudiente = formData.nombreEstudiante;
+        dataToSend.profesion = formData.parentesco; // Usando parentesco como profesión temporalmente
+      }
+
+      // Llamar a la server action
+      const resultado = await registrarAsistente(dataToSend);
+
+      if (resultado.success) {
+        setSubmitMessage({
+          type: 'success',
+          text: '¡Registro exitoso! Tu asistencia ha sido confirmada.'
+        });
+        
+        // Limpiar formulario después de 2 segundos
+        setTimeout(() => {
+          setFormData({
+            jornada: [],
+            nombres: '',
+            apellidos: '',
+            tipoDocumento: '',
+            numeroIdentidad: '',
+            correo: '',
+            telefono: '',
+            tipoAsistente: '',
+            sedeEducativa: '',
+            gradoEstudio: '',
+            parentesco: '',
+            nombreEstudiante: '',
+            gradoEstudiante: '',
+            sedeEstudiante: '',
+            aceptaPoliticas: false,
+          });
+          setSubmitMessage(null);
+        }, 3000);
+      } else {
+        setSubmitMessage({
+          type: 'error',
+          text: resultado.message || 'Error al registrar. Por favor intenta de nuevo.'
+        });
+      }
+    } catch (error) {
+      console.error('Error al enviar formulario:', error);
+      setSubmitMessage({
+        type: 'error',
+        text: 'Error al procesar el registro. Por favor intenta de nuevo.'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -254,8 +350,26 @@ export default function Home() {
               onChange={(value) => setFormData({ ...formData, aceptaPoliticas: value })}
             />
 
+            {/* Mensaje de resultado */}
+            {submitMessage && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`p-4 rounded-lg ${
+                  submitMessage.type === 'success'
+                    ? 'bg-green-50 border border-green-200 text-green-800'
+                    : 'bg-red-50 border border-red-200 text-red-800'
+                }`}
+              >
+                <p className="text-sm font-medium">{submitMessage.text}</p>
+              </motion.div>
+            )}
+
             {/* Botón de Envío */}
-            <SubmitButton />
+            <SubmitButton disabled={isSubmitting} />
+            {isSubmitting && (
+              <p className="text-center text-sm text-gray-500">Enviando registro...</p>
+            )}
           </form>
         </div>
 
